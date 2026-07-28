@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<script>const APP_VER=7;if(sessionStorage.appVer&&+sessionStorage.appVer!==APP_VER){sessionStorage.appVer=APP_VER;location.reload(true)}else{sessionStorage.appVer=APP_VER}</script>
+<title>T1-6000 散粉吐丝期调查</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:#f5f5f0;color:#333;font-size:17px;}
+.top{background:#fff;padding:10px 14px;box-shadow:0 1px 4px rgba(0,0,0,0.08);}
+.top h1{font-size:16px;color:#2e7d32;margin-bottom:2px;}
+.top .info{font-size:12px;color:#888;}
+.stat-row{display:flex;gap:4px;margin-top:4px;flex-wrap:wrap;}
+.stat{flex:1;min-width:45px;text-align:center;background:#f9f9f4;border-radius:4px;padding:3px 6px;}
+.stat .v{font-size:16px;font-weight:700;line-height:1.2;}
+.stat .l{font-size:10px;color:#888;}
+.v.g{color:#2e7d32;}.v.o{color:#e65100;}.v.b{color:#1565c0;}
+.bar-wrap{height:4px;background:#e0e0e0;border-radius:2px;margin-top:6px;}
+.bar{height:100%;background:#2e7d32;border-radius:2px;transition:width .3s;}
+.ctrls{padding:5px 8px;background:#fff;border-bottom:1px solid #e0e0d8;}
+.ctrls .row{display:flex;gap:4px;align-items:center;margin:2px 0;height:36px;}
+.ctrls input{flex:1;min-width:80px;padding:7px 8px;border:1px solid #ddd;border-radius:5px;font-size:15px;}
+.ctrls select{padding:7px 8px;border:1px solid #ddd;border-radius:5px;font-size:15px;background:#fff;}
+.btn{padding:7px 14px;border:1px solid #ddd;border-radius:5px;background:#fff;font-size:15px;cursor:pointer;white-space:nowrap;}
+.btn:active{background:#eee;}
+.btn.g{background:#2e7d32;color:#fff;border-color:#2e7d32;}
+.btn.r{background:#c62828;color:#fff;border-color:#c62828;}
+.btn.s{padding:6px 10px;font-size:14px;}
+.ftag{padding:5px 10px;border-radius:13px;font-size:14px;border:1px solid #ddd;background:#fff;cursor:pointer;}
+.ftag.on{background:#2e7d32;color:#fff;border-color:#2e7d32;}
+.ftag.wo.on{background:#e65100;border-color:#e65100;}
+
+.list{padding:8px 12px;}
+.card{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#fff;border-radius:8px;margin-bottom:6px;border:1px solid #f0f0e8;cursor:pointer;}
+.card:active{background:#f5f5ee;}
+.card .dot{width:14px;height:14px;border-radius:50%;flex-shrink:0;}
+.card .mid{flex:1;min-width:0;}
+.card .mid .nm{font-weight:600;font-size:20px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.card .mid .sub{font-size:20px;color:#888;margin-top:2px;}
+.card .arrow{color:#ccc;font-size:20px;flex-shrink:0;}
+
+.modal-bg{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.4);z-index:100;display:flex;align-items:flex-end;justify-content:center;}
+.modal{background:#fff;border-radius:16px 16px 0 0;padding:16px 16px 24px;width:100%;max-width:500px;max-height:85vh;overflow-y:auto;box-shadow:0 -4px 20px rgba(0,0,0,0.1);}
+.modal h3{font-size:26px;color:#2e7d32;margin-bottom:12px;}
+.row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f5f5ee;font-size:20px;}
+.row .k{color:#888;}
+.row .v{font-weight:500;text-align:right;word-break:break-all;max-width:60%;}
+.fld{margin-top:10px;}
+.fld label{font-size:14px;color:#888;display:block;margin-bottom:3px;}
+.fld input{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:20px;}
+.fld input:focus{outline:none;border-color:#2e7d32;}
+.btns{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap;}
+.btns .btn{flex:1;text-align:center;padding:16px;font-size:19px;}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:10px 24px;border-radius:8px;font-size:15px;z-index:200;opacity:0;transition:opacity .3s;pointer-events:none;}
+.toast.s{opacity:1;}
+.hint{text-align:center;padding:20px;color:#888;font-size:15px;}
+.jump{display:flex;gap:1px;align-items:center;font-size:12px;}
+.jump input{flex:0 0 36px;width:36px;min-width:36px;padding:4px 0;border:2px solid #bbb;border-radius:4px;text-align:center;font-size:17px;font-weight:700;}
+.qdates{display:flex;gap:2px;margin:3px 0;flex-wrap:nowrap;}
+.qbtn{flex:1;min-width:0;padding:8px 1px;border:2px solid #aaa;border-radius:6px;background:#d4cfc0;font-size:18px;cursor:pointer;text-align:center;white-space:pre-line;line-height:1.25;font-weight:700;color:#111;}
+.qbtn:active{background:#c8e6c9;}
+.qbtn.done{background:#ececec;border-color:#d5d5d5;color:#cecece;font-weight:300;opacity:1;}
+.qbtn.sel{border-color:#2e7d32;background:#81c784;font-weight:800;color:#333;box-shadow:0 0 4px rgba(46,125,50,0.4);opacity:1;}
+.qbtn.done.sel{border-color:#999;background:#a5d6a7;color:#999;box-shadow:none;opacity:1;}
+.qbtn.sel.done{border-color:#bbb;background:#c8e6c9;color:#888;box-shadow:none;opacity:0.85;}
+.qbtn.sel.done{border-color:#999;background:#c8e6c9;color:#777;box-shadow:none;}
+.qlabel{font-size:16px;color:#888;margin-top:8px;}
+
+/* Camera scan overlay */
+.scan-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:#000;z-index:300;display:flex;flex-direction:column;}
+.scan-overlay video{flex:1;width:100%;object-fit:cover;}
+.scan-overlay .scan-frame{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:220px;height:220px;border:3px solid #66bb6a;border-radius:8px;box-shadow:0 0 0 9999px rgba(0,0,0,0.5);}
+.scan-overlay .scan-close{position:absolute;top:16px;right:16px;z-index:1;background:rgba(0,0,0,0.6);color:#fff;border:none;padding:10px 16px;border-radius:8px;font-size:14px;cursor:pointer;}
+.scan-overlay .scan-hint{position:absolute;bottom:40px;left:0;right:0;text-align:center;color:#fff;font-size:14px;z-index:1;}
+</style>
+</head>
+<body>
+<div id="loader" style="position:fixed;top:0;left:0;right:0;bottom:0;background:#f5f5f0;z-index:9999;display:flex;align-items:center;justify-content:center;font-size:18px;color:#888;">加载中...</div>
+
+<div style="position:sticky;top:0;z-index:20;">
+<div class="top">
+  <h1>🌽 T1-5000 散粉期 & 吐丝期调查</h1>
+  <div class="info">夏播 · 30排×200列 · 3193小区</div>
+  <div class="stat-row" id="stats"></div>
+  <div class="bar-wrap"><div class="bar" id="bar" style="width:0%"></div></div>
+</div>
+
+<div class="ctrls">
+  <div class="row">
+    <input type="text" id="q" placeholder="搜..." oninput="debounceRender()" onkeydown="if(event.key==='Enter')searchJump()" style="flex:1;min-width:0;">
+    <input type="file" id="camIn" accept="image/*" capture="environment" style="display:none" onchange="scanCam()">
+    <button class="btn s" onclick="startLiveScan()" title="扫码" style="font-size:20px;padding:4px 10px;">📷</button>
+    <span class="ftag" data-f="all" onclick="setF('all',this)">全部</span>
+    <span class="ftag wo on" data-f="no" onclick="setF('no',this)">未调查</span>
+    <span class="ftag" data-f="ok" onclick="setF('ok',this)">已完成</span>
+  </div>
+  <div class="row" style="justify-content:space-between;">
+    <div class="jump" style="flex:1;">
+      排<input id="jR" type="number" min="45" max="74" value="6">
+      列<input id="jC" type="number" min="5" max="204" value="101">
+      <button class="btn s" onclick="jump()" style="min-width:30px;padding:4px 6px;font-size:14px;">跳</button>
+    </div>
+    <button class="btn s" onclick="cloudPull();toast('刷新中...')" style="flex:1;font-size:15px;text-align:center;">刷新</button>
+    <button class="btn g s" onclick="exportCSV()" style="flex:1;text-align:center;">导出</button>
+  </div>
+</div>
+</div>
+
+<div class="list" id="list"></div>
+<div class="hint" id="hint"></div>
+
+<div class="modal-bg" id="mdBg" style="display:none" onclick="if(event.target===this)closeM()">
+  <div class="modal" id="mdCt"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="scan-overlay" id="scanOverlay" style="display:none">
+  <video id="scanVideo" playsinline autoplay muted></video>
+  <div class="scan-frame"></div>
+  <button class="scan-close" onclick="stopLiveScan()">✕ 关闭</button>
+  <div class="scan-hint" id="scanHint">将二维码对准框内</div>
+</div>
+
+<script src="https://unpkg.com/jsqr@1.4.0/dist/jsQR.js"></script>
+<script>
+<script src="field_data.js"></script>
+
+const G={rs:45,re:74,cs:5,ce:204};
+
+</script>
+
+<script>
+// Parse
+const D=[], GR={};
+R.forEach((it,i)=>{
+  const d={id:it[0],nm:it[1],r:it[2],c:it[3],sf:it[4],ts:it[5],fe:it[6],ma:it[7],de:it[8],ct:it[9],cx:it[10],rm:it[11]};
+  D.push(d);
+  if(!GR[d.r])GR[d.r]={};
+  GR[d.r][d.c]=i;
+});
+const MS=new Set(M.map(m=>m[0]+','+m[1]));
+
+// Sort by UID once at init
+D.sort((a,b)=>a.id.localeCompare(b.id));
+// Rebuild GR after sort
+for(let r=G.rs;r<=G.re;r++)GR[r]={};
+D.forEach((d,i)=>{if(!GR[d.r])GR[d.r]={};GR[d.r][d.c]=i;});
+
+// Edits
+const ED=JSON.parse(localStorage.getItem('t1_v4')||'{}');
+
+// Scrapped plots: embedded in page, no link update needed
+const SCRAPPED=['26XXY08051','26XXY08251'];
+SCRAPPED.forEach(id=>{if(!ED[id])ED[id]={};ED[id].sf='报废';ED[id].ts='报废';ED[id].scrapped=true;});
+
+// Auto-sync: dual channel - write to cloud, read from relay
+const CLOUD='https://jsonblob.com/api/jsonBlob/019fa7dc-8be2-74f9-8a8e-aca4dbcd4060';
+let syncVer=0, pollTimer=null;
+
+let _saveTimer=null;
+function scheduleSave(){clearTimeout(_saveTimer);_saveTimer=setTimeout(flushSave,200);}
+function flushSave(){clearTimeout(_saveTimer);save();}
+let _pushTimer=null;
+function schedulePush(){clearTimeout(_pushTimer);_pushTimer=setTimeout(cloudPush,500);}
+window.addEventListener('beforeunload',()=>{flushSave();});
+window.addEventListener('pagehide',()=>{flushSave();});
+
+function save(){localStorage.setItem('t1_v4',JSON.stringify(ED));}
+
+async function cloudPush(){
+  try{
+    // Read remote first to avoid overwriting newer data
+    const check=await fetch(CLOUD);
+    if(check.ok){
+      const remote=await check.json();
+      const remoteVer=remote.ver||0;
+      const remoteCount=remote.data?Object.keys(remote.data).length:0;
+      const localCount=Object.values(ED).filter(v=>v.sf||v.ts).length;
+      // Don't push if remote has more data and we're behind
+      if(remoteCount>0&&localCount===0)return;
+      if(remoteVer>syncVer&&remoteCount>localCount)return;
+    }
+    syncVer++;
+    await fetch(CLOUD,{method:'PUT',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({ver:syncVer,data:ED,ts:Date.now()})});
+  }catch(e){}
+}
+
+async function cloudPull(){
+  try{
+    // Quick version check first to avoid downloading full blob if unchanged
+    const head=await fetch(CLOUD,{method:'HEAD',cache:'no-store'});
+    const etag=head.headers.get('etag')||'';
+    if(etag&&etag===_lastCloudEtag)return;
+    _lastCloudEtag=etag;
+    const resp=await fetch(CLOUD);
+    if(!resp.ok)return;
+    const remote=await resp.json();
+    if(!remote||!remote.data)return;
+    const remoteVer=remote.ver||0;
+    if(remoteVer>syncVer)syncVer=remoteVer;
+    let n=0;
+    for(const[id,v]of Object.entries(remote.data)){
+      if(id==='test'||id==='ts')continue;
+      if(!ED[id]){ED[id]=v;n++;continue;}
+      // Merge: remote fills missing local fields
+      if(v.scrapped&&!ED[id].scrapped){ED[id].scrapped=true;ED[id].sf='报废';ED[id].ts='报废';n++;}
+      else{
+        if(!ED[id].sf&&v.sf){ED[id].sf=v.sf;n++;}
+        if(!ED[id].ts&&v.ts){ED[id].ts=v.ts;n++;}
+      }
+    }
+    if(n>0){save();renderStats();_doneCount=D.filter(d=>done(d)).length;updateBar();}
+  }catch(e){}
+}
+
+let _lastCloudEtag='';
+pollTimer=setInterval(cloudPull,30000);
+cloudPull();
+
+
+
+function gs(d){return(ED[d.id]&&ED[d.id].sf!==undefined)?ED[d.id].sf:d.sf;}
+function gt(d){return(ED[d.id]&&ED[d.id].ts!==undefined)?ED[d.id].ts:d.ts;}
+function hs(d){const v=gs(d);return v&&String(v).trim()!=='';}
+function ht(d){const v=gt(d);return v&&String(v).trim()!=='';}
+function done(d){const ed=ED[d.id];return hs(d)&&ht(d)||!!(ed&&ed.scrapped);}
+function scrapped(d){return !!(ED[d.id]&&ED[d.id].scrapped);}
+function fmt(v){if(!v)return'❌';if(v==='报废')return'报废';const m=v.match(/^(\d{4})-(\d{2})-(\d{2})$/);if(m)return m[2].replace(/^0/,'')+'/'+m[3].replace(/^0/,'');return v;}
+
+function syncIn(){
+  const hash=window.location.hash.slice(1);
+  if(!hash)return 0;
+  try{
+    const raw=decodeURIComponent(escape(atob(hash)));
+    const pipe=raw.indexOf('|');
+    let sid='',rest=raw;
+    if(pipe>0){sid=raw.substring(0,pipe);rest=raw.substring(pipe+1);}
+    if(sid&&!syncId){syncId=sid;localStorage.setItem('t1_sync_id',syncId);}
+    if(!rest)return 0;
+    const parts=rest.split('|');
+    let n=0;
+    for(const p of parts){
+      const[idx,vals]=p.split('=');
+      if(!idx||!vals)continue;
+      const seg=vals.split(',');
+      const sf=seg[0]||'',ts=seg[1]||'',sc=seg[2]==='1';
+      if(!ED[idx]){ED[idx]={};n++;}
+      else if(ED[idx].sf||ED[idx].ts||ED[idx].scrapped)continue;
+      else n++;
+      ED[idx].sf=sf;ED[idx].ts=ts;
+      if(sc)ED[idx].scrapped=true;
+    }
+    if(n>0){save();toast('📥 从链接同步了 '+n+' 条');}
+    return n;
+  }catch(e){console.log('Sync parse error:',e);return 0;}
+}
+
+function updateQRUrl(){
+  const el=document.getElementById('qrTxt');
+  if(el)el.textContent=window.location.href;
+}
+
+let FL='no', SEL=null, skipAuto=false;
+
+// Render
+function render(){
+  requestAnimationFrame(()=>_render());
+}
+let _debounceTimer=null;
+function debounceRender(){clearTimeout(_debounceTimer);_debounceTimer=setTimeout(render,150);}
+function _render(){
+  const q=document.getElementById('q').value.trim().toLowerCase();
+  let rows=D.slice();
+  if(FL==='no') rows=rows.filter(d=>!done(d));
+  else if(FL==='ok') rows=rows.filter(d=>done(d));
+  if(q) rows=rows.filter(d=>d.id.toLowerCase().includes(q)||d.nm.toLowerCase().includes(q)||d.fe.toLowerCase().includes(q)||d.ma.toLowerCase().includes(q));
+
+  const l=document.getElementById('list');
+  if(rows.length===0){l.innerHTML='';document.getElementById('hint').textContent='没有匹配的小区';}
+  else{
+    document.getElementById('hint').textContent=`共 ${rows.length} 个小区`;
+    renderCards(rows,l);
+  }
+  skipAuto=false;
+  renderStats();
+}
+
+let _lazyRows=[], _lazyIdx=0, _lazyList=null, _lazyObs=null;
+
+function renderCards(rows,l){
+  _lazyRows=rows; _lazyIdx=0; _lazyList=l;
+  l.innerHTML='';
+  loadBatch(150);
+  // Set up sentinel observer
+  if(_lazyObs)_lazyObs.disconnect();
+  _lazyObs=new IntersectionObserver((e)=>{if(e[0].isIntersecting)loadBatch(150);});
+}
+
+function loadBatch(n){
+  if(_lazyIdx>=_lazyRows.length){
+    // Remove sentinel
+    const s=document.getElementById('lazySentinel');
+    if(s)s.remove();
+    return;
+  }
+  const end=Math.min(_lazyIdx+n,_lazyRows.length);
+  let h='';
+  for(let j=_lazyIdx;j<end;j++){
+    const d=_lazyRows[j];
+    const ok=done(d), sf=hs(d), ts=ht(d), sc=scrapped(d);
+    const clr=sc?'#bdbdbd':(ok?'#66bb6a':(sf||ts?'#ffd54f':'#ef5350'));
+    h+=`<div class="card" data-id="${d.id}" onclick="sel(${d.r},${d.c})">
+      <div class="dot" style="background:${clr}"></div>
+      <div class="mid">
+        <div class="nm">${d.id}${sc?' <span style=\"color:#757575\">[报废]</span>':''}</div>
+        <div class="sub">排${d.r} 列${d.c} | 散粉:${sc?'-':fmt(gs(d))} 吐丝:${sc?'-':fmt(gt(d))}</div>
+      </div>
+      <span class="arrow">›</span>
+    </div>`;
+  }
+  _lazyIdx=end;
+  // Remove old sentinel, insert batch, add new sentinel
+  const oldS=document.getElementById('lazySentinel');
+  if(oldS)oldS.remove();
+  _lazyList.insertAdjacentHTML('beforeend',h);
+  if(_lazyIdx<_lazyRows.length){
+    _lazyList.insertAdjacentHTML('beforeend','<div id="lazySentinel" style="height:1px"></div>');
+    _lazyObs.observe(document.getElementById('lazySentinel'));
+  }
+}
+
+function renderStats(){
+  let ok=0,no=0,par=0;
+  D.forEach(d=>{
+    if(done(d))ok++;
+    else if(hs(d)||ht(d))par++;
+    else no++;
+  });
+  _doneCount=ok;
+  const pct=D.length?Math.round(ok/D.length*100):0;
+  document.getElementById('stats').innerHTML=`
+    <div class="stat"><div class="v">${D.length}</div><div class="l">总小区</div></div>
+    <div class="stat"><div class="v g">${ok}</div><div class="l">已完成</div></div>
+    <div class="stat"><div class="v o">${no}</div><div class="l">未调查</div></div>
+    <div class="stat"><div class="v b">${par}</div><div class="l">部分完成</div></div>
+    <div class="stat"><div class="v b">${pct}%</div><div class="l">完成率</div></div>
+  `;
+  document.getElementById('bar').style.width=pct+'%';
+}
+
+function setF(f,el){
+  FL=f;
+  document.querySelectorAll('.ftag').forEach(t=>t.classList.remove('on'));
+  el.classList.add('on');
+  render();
+}
+
+// Cell selection
+function sel(r,c){
+  const i=GR[r]?.[c];
+  if(i===undefined)return;
+  const d=D[i]; SEL=i;
+  editModal(d);
+}
+
+// Jump
+function jump(){
+  const r=+document.getElementById('jR').value,c=+document.getElementById('jC').value;
+  if(r<G.rs||r>G.re||c<G.cs||c>G.ce){toast('位置无效');return;}
+  const i=GR[r]?.[c];
+  if(i===undefined&&MS.has(r+','+c)){toast('该位置为空位');return;}
+  if(i===undefined){toast('无数据');return;}
+  const d=D[i]; SEL=i;
+  // Scroll to card
+  document.getElementById('q').value=d.id;
+  FL='all';document.querySelectorAll('.ftag').forEach(t=>t.classList.remove('on'));
+  document.querySelector('[data-f="all"]').classList.add('on');
+  render();
+  setTimeout(()=>editModal(d),100);
+}
+
+// Search: if exact UID match, jump directly; otherwise filter
+function searchJump(){
+  const q=document.getElementById('q').value.trim();
+  const d=D.find(x=>x.id===q);
+  if(d){SEL=D.indexOf(d);editModal(d);}
+}
+
+// Live camera scan
+let scanStream=null,scanTimer=null,scanCanvas=null,scanCtx=null;
+
+async function startLiveScan(){
+  try{
+    scanStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment',width:{ideal:640},height:{ideal:480}}});
+    const video=document.getElementById('scanVideo');
+    video.srcObject=scanStream;
+    await video.play();
+    scanCanvas=document.createElement('canvas');
+    scanCanvas.width=640;scanCanvas.height=480;
+    scanCtx=scanCanvas.getContext('2d');
+    document.getElementById('scanOverlay').style.display='flex';
+    document.getElementById('scanHint').textContent='将二维码对准框内';
+    scanLoop();
+  }catch(e){
+    // Fallback to photo mode
+    document.getElementById('camIn').click();
+  }
+}
+
+function scanLoop(){
+  if(!scanStream)return;
+  const video=document.getElementById('scanVideo');
+  if(video.readyState<2){scanTimer=requestAnimationFrame(scanLoop);return;}
+  scanCtx.setTransform(1,0,0,1,0,0);
+  scanCtx.drawImage(video,0,0,640,480);
+  const data=scanCtx.getImageData(0,0,640,480);
+  if(typeof jsQR!=='undefined'){
+    let code=jsQR(data.data,640,480);
+    // If not found, try flipped (mirrored camera)
+    if(!code){
+      scanCtx.setTransform(-1,0,0,1,640,0);
+      scanCtx.drawImage(video,0,0,640,480);
+      const flipData=scanCtx.getImageData(0,0,640,480);
+      code=jsQR(flipData.data,640,480);
+      scanCtx.setTransform(1,0,0,1,0,0);
+    }
+    if(code){
+      const uid=code.data.trim();
+      const m=uid.match(/[?&](?:id|uid)=([^&]+)/i);
+      const clean=m?decodeURIComponent(m[1]):uid;
+      stopLiveScan();
+      const d=D.find(x=>x.id===clean);
+      if(!d){toast('未找到: '+clean);return;}
+      // Render full list and scroll to card
+      FL='all';document.querySelectorAll('.ftag').forEach(t=>t.classList.remove('on'));
+      document.querySelector('[data-f="all"]').classList.add('on');
+      skipAuto=true;render();
+      requestAnimationFrame(()=>{
+        requestAnimationFrame(()=>{
+          const card=document.querySelector('.card[data-id="'+clean+'"]');
+          if(card){
+            // Scroll card to center of viewport
+            const top=card.getBoundingClientRect().top+window.pageYOffset-200;
+            window.scrollTo({top,behavior:'smooth'});
+            card.style.outline='3px solid #1565c0';
+            card.style.background='#e3f2fd';
+            setTimeout(()=>{card.style.outline='';card.style.background='';},4000);
+          }
+        });
+      });
+      return;
+    }
+  }
+  scanTimer=requestAnimationFrame(scanLoop);
+}
+
+function stopLiveScan(){
+  if(scanTimer){cancelAnimationFrame(scanTimer);scanTimer=null;}
+  if(scanStream){scanStream.getTracks().forEach(t=>t.stop());scanStream=null;}
+  document.getElementById('scanOverlay').style.display='none';
+  // Keep the hidden file input as fallback
+  document.getElementById('camIn').value='';
+}
+
+// Quick date helpers
+function today(){return new Date().toISOString().slice(0,10);}
+function dayOffset(n){const d=new Date();d.setDate(d.getDate()+n);return d.toISOString().slice(0,10);}
+function dateLabel(n){const d=dayOffset(n);const m=d.slice(5,7).replace(/^0/,'');const day=d.slice(8,10).replace(/^0/,'');const labels={'-2':'前天','-1':'昨天','0':'今天','1':'明天','2':'后天'};return labels[''+n]+'<br>'+m+'/'+day;}
+function dateBtn(uid,field,n,hasVal){const cls=hasVal?'qbtn done':'qbtn';return '<button class="'+cls+'" data-f='+field+' data-n='+n+' onclick=setDate(\"'+field+'\",'+n+',\"'+uid+'\")>'+dateLabel(n)+'</button>';}
+function setDate(field,n,uid){
+  const d=dayOffset(n);
+  if(!ED[uid])ED[uid]={};
+  const wasDone=ED[uid].sf&&ED[uid].ts;
+  ED[uid][field]=d;
+  scheduleSave();schedulePush();
+  // Update button highlights inline (no DOM query)
+  document.querySelectorAll('.qbtn[data-f='+field+']').forEach(b=>b.classList.remove('sel'));
+  document.querySelector('.qbtn[data-f='+field+'][data-n=\"'+n+'\"]')?.classList.add('sel');
+  // Quick card dot update
+  const card=document.querySelector('.card[data-id=\"'+uid+'\"]');
+  if(card){
+    const dot=card.querySelector('.dot');
+    if(dot){
+      const ok=ED[uid].sf&&ED[uid].ts, sf=ED[uid].sf, ts=ED[uid].ts;
+      dot.style.background=ok?'#66bb6a':(sf||ts?'#ffd54f':'#ef5350');
+    }
+  }
+  // Incremental stats update (skip full scan)
+  const nowDone=ED[uid].sf&&ED[uid].ts;
+  if(wasDone!==nowDone){
+    _doneCount+=nowDone?1:-1;
+    updateBar();
+    renderStats();
+  }else{
+    updateBar();
+  }
+  toast('✅ '+{sf:'散粉',ts:'吐丝'}[field]+'='+dateLabel(n).split('<br>')[1]);
+}
+
+let _doneCount=0;
+function updateBar(){document.getElementById('bar').style.width=Math.round(_doneCount/D.length*100)+'%';}
+
+// Edit modal
+function editModal(d){
+  _snap=ED[d.id]?{sf:ED[d.id].sf||'',ts:ED[d.id].ts||''}:{sf:'',ts:''};
+  const sf=gs(d),ts=gt(d), sc=scrapped(d);
+  if(sc){
+    document.getElementById('mdCt').innerHTML=`
+      <h3>🗑 ${d.id} [报废]</h3>
+      <div class="row"><span class="k">位置</span><span class="v">排${d.r} 列${d.c}</span></div>
+      <div class="btns"><button class="btn" onclick="closeM()">✕ 关</button></div>`;
+    document.getElementById('mdBg').style.display='flex';return;
+  }
+  document.getElementById('mdCt').innerHTML=`
+    <h3>${done(d)?'✅':'⚠️'} ${d.id}</h3>
+    <div class="row"><span class="k">位置</span><span class="v">排${d.r} 列${d.c}</span></div>
+    <div style="background:${sf?'#e8f5e9':'#fff8e1'};border-radius:8px;padding:6px 8px;margin-top:6px;">
+    <div class="qlabel">🌾 散粉期 ${sf?'<b>'+fmt(sf)+'</b>':'未填'}</div>
+    <div class="qdates">${dateBtn(d.id,'sf',-2,sf)}${dateBtn(d.id,'sf',-1,sf)}${dateBtn(d.id,'sf',0,sf)}${dateBtn(d.id,'sf',1,sf)}${dateBtn(d.id,'sf',2,sf)}</div>
+    </div>
+    <div style="background:${ts?'#e8f5e9':'#fff8e1'};border-radius:8px;padding:6px 8px;margin-top:6px;">
+    <div class="qlabel">🌽 吐丝期 ${ts?'<b>'+fmt(ts)+'</b>':'未填'}</div>
+    <div class="qdates">${dateBtn(d.id,'ts',-2,ts)}${dateBtn(d.id,'ts',-1,ts)}${dateBtn(d.id,'ts',0,ts)}${dateBtn(d.id,'ts',1,ts)}${dateBtn(d.id,'ts',2,ts)}</div>
+    </div>
+    <div class="btns">
+      <button class="btn r" onclick="delOne('${d.id}')">🗑 清除</button>
+      <button class="btn" onclick="nav(-1)">◀ 上</button>
+      <button class="btn" onclick="nav(1)">下 ▶</button>
+      <button class="btn" onclick="closeM()">✕ 关</button>
+    </div>
+  `;
+  document.getElementById('mdBg').style.display='flex';
+  // Highlight selected date buttons
+  highlightBtn(d,'sf');highlightBtn(d,'ts');
+}
+
+// Highlight selected date button for a field
+function formatDate(d){const m=d.slice(5,7).replace(/^0/,'');const day=d.slice(8,10).replace(/^0/,'');return m+'/'+day;}
+function highlightBtn(d,field){
+  const val=ED[d.id]?ED[d.id][field]:'';
+  if(!val)return;
+  for(let n=-2;n<=2;n++){
+    if(dayOffset(n)===val){
+      document.querySelector('.qbtn[data-f='+field+'][data-n=\"'+n+'\"]')?.classList.add('sel');
+      return;
+    }
+  }
+}
+
+function saveOne(id){closeM();render();}
+
+let _snap=null;
+function delOne(id){
+  if(!ED[id])ED[id]={};
+  if(_snap){
+    ED[id].sf=_snap.sf||'';
+    ED[id].ts=_snap.ts||'';
+  }else{
+    ED[id].sf='';ED[id].ts='';
+  }
+  save();schedulePush();
+  renderStats();
+  const d=D.find(x=>x.id===id);
+  if(d)requestAnimationFrame(()=>editModal(d));
+  toast('🗑 已清除');
+}
+
+function nav(dir){
+  if(SEL===null)return;
+  const idx=D.filter(d=>{
+    if(scrapped(d))return false;
+    if(FL==='no')return !done(d);
+    if(FL==='ok')return done(d);
+    return true;
+  }).map(d=>D.indexOf(d));
+  if(!idx.length)return;
+  let p=idx.indexOf(SEL);
+  if(p<0)p=dir<0?idx.findIndex(i=>i>SEL):idx.length-1-([...idx].reverse().findIndex(i=>i<SEL));
+  if(p<0)p=0;
+  const np=(p+dir+idx.length)%idx.length;
+  SEL=idx[np];
+  editModal(D[SEL]);
+}
+function closeM(){
+  save();schedulePush();
+  document.getElementById('mdBg').style.display='none';
+  // Only refresh stats + the affected card, not full list
+  if(SEL!==null&&D[SEL]){
+    const d=D[SEL];
+    const ok=done(d), sf=hs(d), ts=ht(d), sc=scrapped(d);
+    const clr=sc?'#bdbdbd':(ok?'#66bb6a':(sf||ts?'#ffd54f':'#ef5350'));
+    const card=document.querySelector('.card[data-id=\"'+d.id+'\"]');
+    if(card){
+      const dot=card.querySelector('.dot');
+      if(dot)dot.style.background=clr;
+      const sub=card.querySelector('.sub');
+      if(sub)sub.textContent='排'+d.r+' 列'+d.c+' | 散粉:'+(sc?'-':fmt(gs(d)))+' 吐丝:'+(sc?'-':fmt(gt(d)));
+    }
+  }
+  renderStats();
+}
+
+// Export
+function exportCSV(){
+  let csv='唯一编号,品种名称,排,列,散粉期,吐丝期,母本,父本,密度,对照类型,抽雄期\n';
+  D.forEach(d=>csv+=`"${d.id}","${d.nm}",${d.r},${d.c},"${gs(d)}","${gt(d)}","${d.fe}","${d.ma}","${d.de}","${d.ct}","${d.cx}"\n`);
+  const b=new Blob(['\uFEFF'+csv],{type:'text/csv'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='T1-5000_调查.csv';a.click();
+  toast('📥 导出成功');
+}
+
+// Toast
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('s');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('s'),2000);}
+function copyLink(){
+  const parts=[];
+  for(const[id,v]of Object.entries(ED)){
+    if((v.sf&&v.sf.trim())||(v.ts&&v.ts.trim())||v.scrapped){
+      parts.push(id+'='+(v.sf||'')+','+(v.ts||'')+','+(v.scrapped?'1':'0'));
+    }
+  }
+  const raw=parts.join('|');
+  if(!raw){toast('暂无数据');return;}
+  const enc=btoa(unescape(encodeURIComponent(raw)));
+  navigator.clipboard.writeText(window.location.origin+window.location.pathname+'#'+enc).then(()=>toast('📋 已复制同步链接'));
+}
+
+// Init
+syncIn();
+render();
+setTimeout(()=>{const ld=document.getElementById('loader');if(ld)ld.style.display='none';},100);
+
+// Auto-jump from URL params
+const sp=new URLSearchParams(window.location.search);
+const jr=+sp.get('r'),jc=+sp.get('c');
+const juid=sp.get('id')||sp.get('uid');
+if(jr&&jc) setTimeout(()=>{document.getElementById('jR').value=jr;document.getElementById('jC').value=jc;jump();},300);
+else if(juid) setTimeout(()=>{document.getElementById('q').value=juid;searchJump();},300);
+console.log('T1-5000 ready. Total:',D.length,'Unsurveyed:',D.filter(d=>!done(d)).length);
+</script>
+</body>
+</html>
