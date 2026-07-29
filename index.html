@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<script>const APP_VER=7;if(sessionStorage.appVer&&+sessionStorage.appVer!==APP_VER){sessionStorage.appVer=APP_VER;location.reload(true)}else{sessionStorage.appVer=APP_VER}</script>
+<script>const APP_VER=8;if(sessionStorage.appVer&&+sessionStorage.appVer!==APP_VER){sessionStorage.appVer=APP_VER;location.reload(true)}else{sessionStorage.appVer=APP_VER}</script>
 <title>T1-6000 散粉吐丝期调查</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -83,7 +83,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
 
 <div style="position:sticky;top:0;z-index:20;">
 <div class="top">
-  <h1>🌽 T1-5000 散粉期 & 吐丝期调查</h1>
+  <h1>🌽 T1-6000 散粉期 & 吐丝期调查</h1>
   <div class="info">夏播 · 30排×200列 · 3193小区</div>
   <div class="stat-row" id="stats"></div>
   <div class="bar-wrap"><div class="bar" id="bar" style="width:0%"></div></div>
@@ -127,14 +127,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
 </div>
 
 <script src="https://unpkg.com/jsqr@1.4.0/dist/jsQR.js"></script>
-<script>
 <script src="field_data.js"></script>
-
-const G={rs:45,re:74,cs:5,ce:204};
-
-</script>
-
 <script>
+const G={rs:45,re:74,cs:5,ce:204};
 // Parse
 const D=[], GR={};
 R.forEach((it,i)=>{
